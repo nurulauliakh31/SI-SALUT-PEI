@@ -27,7 +27,9 @@ class HasilKeputusanController extends Controller
 
     public function index()
     {
-        $penilaian = Penilaian::all();
+        $penilaian = Penilaian::select('periode','alternatif_id')
+            ->groupBy('periode','alternatif_id')
+            ->get();
         $prodi = Prodi::all();
         return view('dashboard.admin.hasil-keputusan.index', compact('penilaian','prodi'));
     }
