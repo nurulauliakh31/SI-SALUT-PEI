@@ -15,8 +15,7 @@
         </div>
         <h2 class="section-title">Data Hasil Keputusan Mahasiswa Lulusan Terbaik</h2>
         <p class="section-lead d-flex justify-content-between">
-            Data Hasil Keputusan ini akan menghasilkan rekomendasi dari mahasiswa lulusan terbaik di PEI. Data ini juga
-            dapat digunakan sebagai laporan.
+            Data Hasil Keputusan ini akan menghasilkan rekomendasi dari mahasiswa lulusan terbaik di PEI. Data ini juga dapat digunakan sebagai laporan.
         </p>
         <div class="card">
             <div class="card-header d-flex justify-content-between">
@@ -37,23 +36,23 @@
                                         <th class="text-center" scope="col">
                                             #
                                         </th>
+                                        {{-- <th scope="col">Kode</th> --}}
                                         <th scope="col">Periode</th>
                                         <th scope="col">Nama Lulusan</th>
                                         <th scope="col">Prodi</th>
                                         <th scope="col">Hasil</th>
                                         <th scope="col">Rank</th>
+                                        {{-- <th scope="col">Aksi</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($penilaian as $key => $nilai)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $nilai->periode }}</td>
-                                            <td>{{ $nilai->name }}</td>
-                                            <td>{{ $nilai->nama_prodi }}</td>
-                                            <td>{{ $nilai->nilai }}</td>
-                                            <td>{{ $nilai->rangking }}</td>
-                                        </tr>
+                                    @foreach ($penilaian as $nilai => $vnilai)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $vnilai->periode }}</td>
+                                        <td>{{ $vnilai->mahasiswa->name}}</td>
+                                        <td>{{ $vnilai->mahasiswa->prodi->nama_prodi}}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>

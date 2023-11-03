@@ -65,6 +65,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     //Laporan
     Route::get('/laporan-admin', [HasilKeputusanController::class, 'index'])->name('laporan');
+    Route::post('/hasil-ranking', [HasilKeputusanController::class, 'rangking'])->name('rangking');
 
     // Route::get('/kelola-akun', [AkunController::class, 'index'])->name('kelola-akun-admin');
     // Route::post('/kelola-akun-simpan', [AkunController::class, 'tambahAkun'])->name('kelola-akun-tambah');

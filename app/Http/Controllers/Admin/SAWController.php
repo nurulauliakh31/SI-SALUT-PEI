@@ -89,8 +89,9 @@ class SAWController extends Controller
         $hasil = Penilaian::with('mahasiswa.prodi')->get();
         $prodi = Prodi::all();
         // dd($penilaian);
+        $siswa = Mahasiswa::all();
 
-        return view('dashboard.admin.perhitungan.index', compact('mahasiswa', 'criteria', 'normalisasi', 'ranking', 'prodi'));
+        return view('dashboard.admin.perhitungan.index', compact('mahasiswa', 'criteria', 'normalisasi', 'ranking', 'prodi', 'siswa'));
     }
 
     public function index_pimpinan()

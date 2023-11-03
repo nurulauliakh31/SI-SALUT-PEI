@@ -29,8 +29,7 @@
                         <div class="card-body">
                             <div class="text-dark dataTables_wrapper dt-bootstrap4">
                                 <div class="table-responsive">
-                                    <table
-                                        class="table text-dark table-bordered dataTable dtr-inline">
+                                    <table class="table text-dark table-bordered dataTable dtr-inline">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -81,8 +80,7 @@
                         <div class="card-body">
                             <div class="text-dark dataTables_wrapper dt-bootstrap4">
                                 <div class="table-responsive">
-                                    <table
-                                        class="table text-dark table-bordered dataTable dtr-inline">
+                                    <table class="table text-dark table-bordered dataTable dtr-inline">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -94,7 +92,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($normalisasi as $key => $value)
-                                            {{-- {{dd($normalisasi)}} --}}
+                                                {{-- {{dd($normalisasi)}} --}}
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $key }}</td>
@@ -131,9 +129,15 @@
                         </div>
                         <div class="accordion-body collapse" id="acc_ranking" data-parent="#accordion">
                             <div class="card-body">
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                    Input Hasil
+                                </button>
+
                                 <div class="text-dark dataTables_wrapper dt-bootstrap4">
                                     <div class="table-responsive">
-                                        <table id="table_ranking" class="table text-dark table-bordered dataTable dtr-inline">
+                                        <table id="table_ranking"
+                                            class="table text-dark table-bordered dataTable dtr-inline">
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -142,7 +146,8 @@
                                                     @endforeach
                                                     <th rowspan="2" style="text-align:center;padding-bottom: 40px;">Total
                                                     </th>
-                                                    <th rowspan="2" style="text-align:center;padding-bottom: 40px;">Rank</th>
+                                                    <th rowspan="2" style="text-align:center;padding-bottom: 40px;">Rank
+                                                    </th>
                                                 </tr>
                                                 <tr>
                                                     <th>Bobot</th>
@@ -160,18 +165,19 @@
                                                             <td>{{ number_format($value_1, 2) }}</td>
                                                             {{-- {{dd($key)}} --}}
                                                         @endforeach
-                                                        <td>{{ $loop->index+1 }}</td>
+                                                        <td>{{ $loop->index + 1 }}</td>
                                                     </tr>
 
                                                     {{-- {{dd($ranking)}} --}}
                                                     @php
-                                                    $data[]=end($value);
-                                                    $lulusan[]=$rank;
+                                                        $data[] = end($value);
+                                                        $lulusan[] = $rank;
                                                     @endphp
                                                 @endforeach
                                                 <div class="alert alert-dark mt-3" role="alert">
                                                     {{-- {{dd($lulusan)}} --}}
-                                                    Rekomendasi mahasiswa lulusan terbaik di PEI adalah <b> {{ $lulusan[0] }} </b> dengan nilai V = {{$data[0]}}.
+                                                    Rekomendasi mahasiswa lulusan terbaik di PEI adalah <b>
+                                                        {{ $lulusan[0] }} </b> dengan nilai V = {{ $data[0] }}.
                                                 </div>
                                             </tbody>
                                         </table>
@@ -183,6 +189,47 @@
                 </div>
             </div>
         </form>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" data-backdrop="false" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Input Hasil</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formHasil">
+                            @csrf
+                            <div class="form-group">
+                                <label for="siswa">Nama Mahasiswa</label>
+                                <select name="siswa" id="siswa" class="form-control">
+                                    <option value="">Pilih Mahasiswa</option>
+                                    @foreach ($siswa as $s => $val)
+                                        <option value="{{ $val->id }}">{{ $val->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hasil">Hasil</label>
+                                <input type="number" class="form-control" id="hasil" name="hasil">
+                            </div>
+                            <div class="form-group">
+                                <label for="rangking">Rangking</label>
+                                <input type="number" class="form-control" id="rangking" name="rangking">
+                            </div>
+                            <div class="form-group">
+                                <label for="periode">Periode</label>
+                                <input type="number" class="form-control" id="periode" name="periode">
+                            </div>
+                            <button type="button" class="btn btn-primary" id="btn-hasil">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
 @endsection
@@ -221,5 +268,30 @@
 
             return false;
         });
+
+        $('#btn-hasil').on('click', function(e) {
+            e.preventDefault()
+            let siswa = $('#siswa').val()
+            let hasil = $('#hasil').val()
+            let rangking = $('#rangking').val()
+
+            if (siswa == '' || hasil == '' || rangking == '') return alert(
+                'Data siswa, hasil dan ranking harus diisi.');
+
+            $.ajax({
+                type: 'post',
+                url: '{{ url('hasil-ranking') }}',
+                data: $('#formHasil').serialize(),
+                success: (res) => {
+                    console.log(res)
+                    $('#formHasil').trigger('reset')
+                    $('#exampleModal').modal('hide')
+                    alert('Data berhasil ditambahkan.')
+                },
+                error: (xhr, status, pesan) => {
+                    console.log(xhr)
+                }
+            })
+        })
     </script>
 @endpush
